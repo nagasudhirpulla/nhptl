@@ -44,6 +44,7 @@ app.use(favicon(__dirname + '/project/public/img/favicon.ico'));
 app.use('/', require('./project/controllers/auth'));
 
 app.use('/', require('./project/controllers/general'));
+app.use('/api/applications', require('./project/controllers/application'));
 
 
 // catch 404 and forward to error handler

@@ -13,6 +13,7 @@ exports.getDateString = function (today) {
 };
 
 exports.getDateTimeString = function (today) {
+    today = new Date(today);
     var dd = today.getDate();
     var mm = today.getMonth() + 1; //January is 0!
     var yyyy = today.getFullYear();
