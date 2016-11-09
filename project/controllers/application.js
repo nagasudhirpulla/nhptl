@@ -14,8 +14,8 @@ router.get('/', function (req, res) {
 
 
 router.post('/', function (req, res, next) {
-    if (req.user.username != "nhptl") {
-        return next(new Error("user is not nhptl"));
+    if (req.user.username != "nhptl" && req.user.username != "admin") {
+        return next(new Error("user is not nhptl or admin"));
     }
     var description = req.body["description"];
     var sc_ka = req.body["sc_ka"];
@@ -25,9 +25,7 @@ router.post('/', function (req, res, next) {
     var from_time = req.body["from_time"];
     var to_time = req.body["to_time"];
     var user_id = req.user.id;
-
     //console.log("Username is " + req.user.username);
-
     Application.create(description, sc_ka, failure_fault_ka, sc_duration, n_shots, from_time, to_time, user_id, function (err, result) {
         if (err) {
             return next(err);
@@ -37,7 +35,10 @@ router.post('/', function (req, res, next) {
 });
 
 router.put('/', function (req, res) {
-    //console.log("The code update request body is " + JSON.stringify(req.body) + "\n");
+    if (req.user.username != "nhptl" && req.user.username != "admin") {
+        return next(new Error("user is not nhptl or admin"));
+    }
+    var id = req.body["application_id"];
     var description = req.body["description"];
     var sc_ka = req.body["sc_ka"];
     var failure_fault_ka = req.body["failure_fault_ka"];
@@ -47,13 +48,26 @@ router.put('/', function (req, res) {
     var to_time = req.body["to_time"];
     var user_id = req.user.id;
 
-    Application.update(description, sc_ka, failure_fault_ka, sc_duration, n_shots, from_time, to_time, user_id, function (err, result) {
+    Application.update(id, description, sc_ka, failure_fault_ka, sc_duration, n_shots, from_time, to_time, user_id, function (err, result) {
         if (err) {
-            res.json({'Error': err});
+            return next(err);
         }
-        //console.log("code update success query result returned is " + JSON.stringify(result));
-        res.json({'updated_code': result});
+        res.json({'application_id': result});
     });
 });
+
+router.delete('/', function (req, res) {
+    if (req.user.username != "nhptl" && req.user.username != "admin") {
+        return next(new Error("user is not nhptl or admin"));
+    }
+    var id = req.body["application_id"];
+    Application.delete(id, function (err, result) {
+        if (err) {
+            return next(err);
+        }
+        res.json({'application_id': result});
+    });
+});
+
 
 module.exports = router;

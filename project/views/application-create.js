@@ -20,8 +20,8 @@ function submitApplication() {
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus, errorThrown);
-            console.log(jqXHR.responseText);
+            //console.log(textStatus, errorThrown);
+            console.log("The Error from server is --- " + jqXHR.responseJSON.message);
         }
     });
 }
