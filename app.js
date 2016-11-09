@@ -45,6 +45,7 @@ app.use('/', require('./project/controllers/auth'));
 
 app.use('/', require('./project/controllers/general'));
 app.use('/api/applications', require('./project/controllers/application'));
+app.use('/api/approvals', require('./project/controllers/approval'));
 
 
 // catch 404 and forward to error handler

@@ -13,10 +13,23 @@ describe('Application Model', function () {
         });
     });
 
-    it('should create an application', function () {
+    it('should create an application,update and delete it', function () {
+        var testingId = null;
         Application.create("from_test", 199, 199, 199, 199, "2016-11-09T14:01", "2016-11-09T14:01", 2, function (err, result) {
             expect(err).to.equal(null);
-            //console.log("Application create insertId is " + result.insertId);
+            testingId = result.insertId;
+            expect(testingId).to.not.equal(null);
+            console.log("Application create insertId is " + result.insertId);
+
+            Application.update(testingId, "from_test", 199, 199, 199, 199, "2016-11-09T14:01", "2016-11-09T14:01", 2, function (err, result) {
+                expect(err).to.equal(null);
+                console.log("Application update result is " + JSON.stringify(result));
+
+                Application.delete(testingId, function (err, result) {
+                    expect(err).to.equal(null);
+                    console.log("Application delete result is " + JSON.stringify(result));
+                });
+            });
         });
     });
 

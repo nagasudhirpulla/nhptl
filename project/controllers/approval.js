@@ -1,22 +1,23 @@
 var express = require('express');
 var router = express.Router();
-var Application = require('../models/application.js');
+var Approval = require('../models/approval.js');
 
 router.get('/', function (req, res) {
     //console.log("get req params for get single are " + JSON.stringify(req.query));
-    Application.get(req.query.id, function (err, rows) {
+    Approval.get(req.query.id, function (err, rows) {
         if (err) {
             res.json({'Error': err});
         }
-        res.json({'applications': rows});
+        res.json({'approvals': rows});
     });
 });
 
 
 router.post('/', function (req, res, next) {
-    if (req.user.username != "nhptl" && req.user.username != "admin") {
-        return next(new Error("user is not nhptl or admin"));
+    if (req.user.username != "admin") {
+        return next(new Error("user is not admin"));
     }
+    var application_id = req.body["application_id"];
     var description = req.body["description"];
     var sc_ka = req.body["sc_ka"];
     var failure_fault_ka = req.body["failure_fault_ka"];
@@ -26,7 +27,7 @@ router.post('/', function (req, res, next) {
     var to_time = req.body["to_time"];
     var user_id = req.user.id;
     //console.log("Username is " + req.user.username);
-    Application.create(description, sc_ka, failure_fault_ka, sc_duration, n_shots, from_time, to_time, user_id, function (err, result) {
+    Approval.create(application_id, description, sc_ka, failure_fault_ka, sc_duration, n_shots, from_time, to_time, user_id, function (err, result) {
         if (err) {
             return next(err);
         }
@@ -35,10 +36,11 @@ router.post('/', function (req, res, next) {
 });
 
 router.put('/', function (req, res) {
-    if (req.user.username != "nhptl" && req.user.username != "admin") {
-        return next(new Error("user is not nhptl or admin"));
+    if (req.user.username != "admin") {
+        return next(new Error("user is not admin"));
     }
-    var id = req.body["application_id"];
+    var id = req.body["approval_id"];
+    var application_id = req.body["application_id"];
     var description = req.body["description"];
     var sc_ka = req.body["sc_ka"];
     var failure_fault_ka = req.body["failure_fault_ka"];
@@ -46,9 +48,10 @@ router.put('/', function (req, res) {
     var n_shots = req.body["n_shots"];
     var from_time = req.body["from_time"];
     var to_time = req.body["to_time"];
+    var fees = req.body["fees"];
     var user_id = req.user.id;
 
-    Application.update(id, description, sc_ka, failure_fault_ka, sc_duration, n_shots, from_time, to_time, user_id, function (err, result) {
+    Approval.update(id, application_id, description, sc_ka, failure_fault_ka, sc_duration, n_shots, from_time, to_time, user_id, fees, function (err, result) {
         if (err) {
             return next(err);
         }
@@ -57,11 +60,11 @@ router.put('/', function (req, res) {
 });
 
 router.delete('/', function (req, res) {
-    if (req.user.username != "nhptl" && req.user.username != "admin") {
-        return next(new Error("user is not nhptl or admin"));
+    if (req.user.username != "admin") {
+        return next(new Error("user is not admin"));
     }
-    var id = req.body["application_id"];
-    Application.delete(id, function (err, result) {
+    var id = req.body["approval_id"];
+    Approval.delete(id, function (err, result) {
         if (err) {
             return next(err);
         }
