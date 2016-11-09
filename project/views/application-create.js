@@ -16,7 +16,7 @@ function submitApplication() {
                     // data.redirect contains the string URL to redirect to
                     window.location.href = data.redirect;
                 }
-                console.log("The application id created is " + data["application_id"]);
+                console.log("The application id created is " + data.application_id);
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {

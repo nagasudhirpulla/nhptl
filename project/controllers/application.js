@@ -26,14 +26,13 @@ router.post('/', function (req, res, next) {
     var to_time = req.body["to_time"];
     var user_id = req.user.id;
 
-
     //console.log("Username is " + req.user.username);
-    //console.log("Code create explicit post request body object is " + JSON.stringify(req.body));
-    Application.create(description, sc_ka, failure_fault_ka, sc_duration, n_shots, from_time, to_time, user_id, function (err, inserted_code) {
+
+    Application.create(description, sc_ka, failure_fault_ka, sc_duration, n_shots, from_time, to_time, user_id, function (err, result) {
         if (err) {
             return next(err);
         }
-        res.json({'new_application': inserted_code});
+        res.json({'application_id': result.insertId});
     });
 });
 

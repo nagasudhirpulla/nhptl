@@ -21,12 +21,8 @@ exports.get = function (id, done) {
 exports.create = function (description, sc_ka, failure_fault_ka, sc_duration, n_shots, from_time, to_time, user_id, done) {
     var f_time_sql = DateHelper.getDateTimeString(new Date(from_time) - 5.5 * 60 * 60 * 1000);
     var t_time_sql = DateHelper.getDateTimeString(new Date(to_time) - 5.5 * 60 * 60 * 1000);
-    var values = [description, sc_ka, failure_fault_ka, sc_duration, n_shots, f_time_sql, t_time_sql, user_id];
-
-    console.log(values);
-
+    var values = [[description], [sc_ka], [failure_fault_ka], [sc_duration], [n_shots], [f_time_sql], [t_time_sql], [user_id]];
     var sql = SQLHelper.createSQLInsertString(tableName, tableColumns.slice(1, tableColumns.length - 1), values);
-    console.log(sql.SQLQueryString);
     db.get().query(sql.SQLQueryString, sql.SQLQueryValues, function (err, rows) {
         if (err) return done(err);
         done(null, rows);
