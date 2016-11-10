@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+    <title>Update Application</title>
+    <link rel="stylesheet" type="text/css" href="libs/css/roboto.css">
+    <link rel="stylesheet" type="text/css" href="./home.css">
+</head>
+<body>
+<div class="wrapper">
+    <div id="header" class="header">
+        <% if (!user) { %>
+        <a style="display: inline-block;margin-right: 20px;float: right;margin-top: 1em;" href="/login">LogIn</a>
+        <% } else { %>
+        <span style="display: inline-block;margin-right: 20px;float: right;margin-top: 1em;"><%= user.username %></span>
+        <a style="display: inline-block;margin-right: 20px;float: right;margin-top: 1em;" href="/logout">Logout</a>
+        <% } %>
+    </div>
+    <h1>Create Application</h1>
+
+    <div>
+        <table>
+            <tr>
+                <td>Application Id</td>
+                <td><span id="application_id"><%= application_id %></span></td>
+            </tr>
+            <tr>
+                <td>Test Description</td>
+                <td><input type="text" id="description"></td>
+            </tr>
+            <tr>
+                <td>Short Circuit KA</td>
+                <td><input type="number" id="sc_ka" min="0" step="0.01"></td>
+            </tr>
+            <tr>
+                <td>Failure KA in case of fault</td>
+                <td><input type="number" id="failure_fault_ka" min="0" step="0.01"></td>
+            </tr>
+            <tr>
+                <td>Short Circuit Duration in milliseconds</td>
+                <td><input type="number" id="sc_duration" min="0" value="0"></td>
+            </tr>
+            <tr>
+                <td>Number of shots</td>
+                <td><input type="number" min="0" id="n_shots" value="1"></td>
+            </tr>
+            <tr>
+                <td>Test Start Time</td>
+                <td><input type="datetime-local" id="from_time"></td>
+            </tr>
+            <tr>
+                <td>Test Stop Time</td>
+                <td><input type="datetime-local" id="to_time"></td>
+            </tr>
+        </table>
+        <button id="submitApplicationButton" onclick="submitApplication()">Submit Application</button>
+    </div>
+    <div class="push"></div>
+</div>
+<% include ./partials/footer %>
+
+<script src="libs/js/jquery.min.js"></script>
+<script src="general-utils.js"></script>
+<script src="application-create.js"></script>
+</body>
+</html>
