@@ -2,11 +2,11 @@ var express = require('express');
 var router = express.Router();
 var Application = require('../models/application.js');
 
-router.get('/', function (req, res) {
+router.get('/', function (req, res, next) {
     //console.log("get req params for get single are " + JSON.stringify(req.query));
     Application.get(req.query.id, function (err, rows) {
         if (err) {
-            res.json({'Error': err});
+            return next(err);
         }
         res.json({'applications': rows});
     });
@@ -34,7 +34,7 @@ router.post('/', function (req, res, next) {
     });
 });
 
-router.put('/', function (req, res) {
+router.put('/', function (req, res, next) {
     if (req.user.username != "nhptl" && req.user.username != "admin") {
         return next(new Error("user is not nhptl or admin"));
     }
@@ -56,7 +56,7 @@ router.put('/', function (req, res) {
     });
 });
 
-router.delete('/', function (req, res) {
+router.delete('/', function (req, res, next) {
     if (req.user.username != "nhptl" && req.user.username != "admin") {
         return next(new Error("user is not nhptl or admin"));
     }

@@ -17,19 +17,22 @@ router.get('/application-create', function (req, res) {
     res.render('application-create', {user: req.user});
 });
 
-router.get('/application-update', function (req, res) {
+router.get('/application-update', function (req, res, next) {
     //console.log((typeof req.user == 'undefined') ? "undefined" : req.user.username);
-    var responseData = {user: req.user, 'application_data': null};
-    if (req.query.id != null) {
-        Application.get(req.query.id, function (err, rows) {
-            if (err) {
-                res.json({'Error': err});
-            }
-            responseData['application_data'] = rows;
-        });
+    var responseData = {user: req.user, 'application_data': {}};
+    var app_id = req.query.id;
+    if (typeof app_id == 'undefined') {
+        app_id = null;
     }
-
-    res.render('application-update', responseData);
+    responseData.application_id = app_id;
+    Application.get(app_id, function (err, rows) {
+        if (err) {
+            res.json({'Error': err});
+        }
+        if (err) return next(err);
+        responseData['application_data'] = rows[0];
+        res.render('application-update', responseData);
+    });
 });
 
 router.get('/approval-create', function (req, res) {

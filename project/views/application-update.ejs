@@ -3,6 +3,7 @@
 <head>
     <title>Update Application</title>
     <link rel="stylesheet" type="text/css" href="libs/css/roboto.css">
+    <link rel="stylesheet" type="text/css" href="libs/css/toastr.min.css">
     <link rel="stylesheet" type="text/css" href="./home.css">
 </head>
 <body>
@@ -15,41 +16,46 @@
         <a style="display: inline-block;margin-right: 20px;float: right;margin-top: 1em;" href="/logout">Logout</a>
         <% } %>
     </div>
-    <h1>Create Application</h1>
+    <h1>Update Application</h1>
 
     <div>
         <table>
             <tr>
                 <td>Application Id</td>
-                <td><span id="application_id"><%= application_id %></span></td>
+                <td><input id="application_id" value="<%= application_data.id %>" readonly></td>
             </tr>
             <tr>
                 <td>Test Description</td>
-                <td><input type="text" id="description"></td>
+                <td><input type="text" id="description" value="<%= application_data.description %>"></td>
             </tr>
             <tr>
                 <td>Short Circuit KA</td>
-                <td><input type="number" id="sc_ka" min="0" step="0.01"></td>
+                <td><input type="number" id="sc_ka" min="0" step="0.01" value="<%= application_data.sc_ka %>"></td>
             </tr>
             <tr>
                 <td>Failure KA in case of fault</td>
-                <td><input type="number" id="failure_fault_ka" min="0" step="0.01"></td>
+                <td><input type="number" id="failure_fault_ka" min="0" step="0.01"
+                           value="<%= application_data.failure_fault_ka %>"></td>
             </tr>
             <tr>
                 <td>Short Circuit Duration in milliseconds</td>
-                <td><input type="number" id="sc_duration" min="0" value="0"></td>
+                <td><input type="number" id="sc_duration" min="0" value="<%= application_data.sc_duration %>"></td>
             </tr>
             <tr>
                 <td>Number of shots</td>
-                <td><input type="number" min="0" id="n_shots" value="1"></td>
+                <td><input type="number" min="0" id="n_shots" value="<%= application_data.n_shots %>"></td>
             </tr>
             <tr>
                 <td>Test Start Time</td>
-                <td><input type="datetime-local" id="from_time"></td>
+                <td><input type="datetime-local" id="from_time"
+                           value="<%= (new Date(new Date(application_data.from_time) - 6.5 * 60 * 60 * 1000)).toJSON().slice(0, 19) %>">
+                </td>
             </tr>
             <tr>
                 <td>Test Stop Time</td>
-                <td><input type="datetime-local" id="to_time"></td>
+                <td><input type="datetime-local" id="to_time"
+                           value="<%= (new Date(new Date(application_data.to_time) - 6.5 * 60 * 60 * 1000)).toJSON().slice(0, 19) %>">
+                </td>
             </tr>
         </table>
         <button id="updateApplicationButton" onclick="updateApplication()">Update Application</button>
@@ -59,6 +65,7 @@
 <% include ./partials/footer %>
 
 <script src="libs/js/jquery.min.js"></script>
+<script src="libs/js/toastr.min.js"></script>
 <script src="general-utils.js"></script>
 <script src="application-update.js"></script>
 </body>

@@ -17,11 +17,14 @@ function submitApplication() {
                     window.location.href = data.redirect;
                 }
                 console.log("The application id created is " + data.application_id);
+                //toastr.success("The application id created is " + data.application_id);
+                window.location.href = "./home";
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             //console.log(textStatus, errorThrown);
             console.log("The Error from server is --- " + jqXHR.responseJSON.message);
+            toastr.error("The Error from server is --- " + jqXHR.responseJSON.message);
         }
     });
 }

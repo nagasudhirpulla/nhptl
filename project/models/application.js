@@ -9,7 +9,7 @@ var tableColumns = ["id", "description", "sc_ka", "failure_fault_ka", "sc_durati
 exports.get = function (id, done) {
     var sql = squel.select()
         .from(tableName);
-    if (id && !isNaN(id)) {//qualifies if id != "" and id!=null and id is a number
+    if (id != null && !isNaN(id)) {//qualifies if id != "" and id!=null and id is a number
         sql.where("id = " + id);
     }
     //console.log("sql for Application get is " + sql);
@@ -23,7 +23,7 @@ exports.create = function (description, sc_ka, failure_fault_ka, sc_duration, n_
     var f_time_sql = DateHelper.getDateTimeString(new Date(from_time) - 5.5 * 60 * 60 * 1000);
     var t_time_sql = DateHelper.getDateTimeString(new Date(to_time) - 5.5 * 60 * 60 * 1000);
     var insertColumns = tableColumns.slice(1, tableColumns.length - 1);
-    var values = [description, sc_ka, failure_fault_ka, sc_duration, n_shots, from_time, to_time, user_id];
+    var values = [description, sc_ka, failure_fault_ka, sc_duration, n_shots, f_time_sql, t_time_sql, user_id];
     var sql = squel.insert()
         .into(tableName);
     for (var i = 0; i < insertColumns.length; i++) {
