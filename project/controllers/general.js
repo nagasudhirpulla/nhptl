@@ -37,21 +37,37 @@ router.get('/application-update', function (req, res, next) {
 
 router.get('/approval-create', function (req, res) {
     //console.log((typeof req.user == 'undefined') ? "undefined" : req.user.username);
-    res.render('approval-create', {user: req.user});
+    var responseData = {user: req.user, 'application_data': {}};
+    var app_id = req.query.id;
+    if (typeof app_id == 'undefined') {
+        app_id = null;
+    }
+    responseData.application_id = app_id;
+    Application.get(app_id, function (err, rows) {
+        if (err) {
+            res.json({'Error': err});
+        }
+        if (err) return next(err);
+        responseData['application_data'] = rows[0];
+        res.render('approval-create', responseData);
+    });
 });
 
 router.get('/approval-update', function (req, res) {
     //console.log((typeof req.user == 'undefined') ? "undefined" : req.user.username);
     var responseData = {user: req.user, 'approval_data': null};
-    if (req.query.id != null) {
-        Approval.get(req.query.id, function (err, rows) {
-            if (err) {
-                res.json({'Error': err});
-            }
-            responseData['approval_data'] = rows;
-        });
+    var app_id = req.query.id;
+    if (typeof app_id == 'undefined') {
+        app_id = null;
     }
-    res.render('approval-update', responseData);
+    responseData.application_id = app_id;
+    Approval.get(app_id, function (err, rows) {
+        if (err) {
+            res.json({'Error': err});
+        }
+        responseData['approval_data'] = rows[0];
+        res.render('approval-update', responseData);
+    });
 });
 
 module.exports = router;

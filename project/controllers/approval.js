@@ -25,13 +25,14 @@ router.post('/', function (req, res, next) {
     var n_shots = req.body["n_shots"];
     var from_time = req.body["from_time"];
     var to_time = req.body["to_time"];
+    var fees = req.body["fees"];
     var user_id = req.user.id;
     //console.log("Username is " + req.user.username);
-    Approval.create(application_id, description, sc_ka, failure_fault_ka, sc_duration, n_shots, from_time, to_time, user_id, function (err, result) {
+    Approval.create(application_id, description, sc_ka, failure_fault_ka, sc_duration, n_shots, from_time, to_time, user_id, fees, function (err, result) {
         if (err) {
             return next(err);
         }
-        res.json({'application_id': result.insertId});
+        res.json({'approval_id': result.insertId});
     });
 });
 

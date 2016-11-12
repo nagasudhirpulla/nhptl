@@ -17,11 +17,13 @@ function submitApproval() {
                     window.location.href = data.redirect;
                 }
                 console.log("The approval id created is " + data.approval_id);
+                toastr.success("The approval id created is " + data.approval_id);
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             //console.log(textStatus, errorThrown);
             console.log("The Error from server is --- " + jqXHR.responseJSON.message);
+            toastr.error("The Error from server is --- " + jqXHR.responseJSON.message);
         }
     });
 }

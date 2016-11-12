@@ -9,7 +9,7 @@ var tableColumns = ["id", "application_id", "description", "sc_ka", "failure_fau
 exports.get = function (id, done) {
     var sql = squel.select()
         .from(tableName);
-    if (id && !isNaN(id)) {//qualifies if id != "" and id!=null and id is a number
+    if (id != null && !isNaN(id)) {//qualifies if id != "" and id!=null and id is a number
         sql.where("id = " + id);
     }
     //console.log("sql for Approval get is " + sql);
@@ -19,11 +19,11 @@ exports.get = function (id, done) {
     });
 };
 
-exports.create = function (application_id, description, sc_ka, failure_fault_ka, sc_duration, n_shots, from_time, to_time, user_id, done) {
+exports.create = function (application_id, description, sc_ka, failure_fault_ka, sc_duration, n_shots, from_time, to_time, user_id, fees, done) {
     var f_time_sql = DateHelper.getDateTimeString(new Date(from_time) - 5.5 * 60 * 60 * 1000);
     var t_time_sql = DateHelper.getDateTimeString(new Date(to_time) - 5.5 * 60 * 60 * 1000);
-    var insertColumns = tableColumns.slice(1, tableColumns.length - 2);
-    var values = [application_id, description, sc_ka, failure_fault_ka, sc_duration, n_shots, f_time_sql, f_time_sql, user_id];
+    var insertColumns = tableColumns.slice(1, tableColumns.length - 1);
+    var values = [application_id, description, sc_ka, failure_fault_ka, sc_duration, n_shots, f_time_sql, f_time_sql, user_id, fees];
     var sql = squel.insert()
         .into(tableName);
     for (var i = 0; i < insertColumns.length; i++) {

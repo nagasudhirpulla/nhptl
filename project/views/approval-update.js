@@ -17,11 +17,13 @@ function updateApproval() {
                     window.location.href = data.redirect;
                 }
                 console.log("The approval update info is " + JSON.stringify(data));
+                toastr.success("The approval update info is " + JSON.stringify(data));
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             //console.log(textStatus, errorThrown);
             console.log("The Error from server is --- " + jqXHR.responseJSON.message);
+            toastr.error("The Error from server is --- " + jqXHR.responseJSON.message);
         }
     });
 }

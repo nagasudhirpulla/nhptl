@@ -3,25 +3,144 @@
 <head>
     <title>Home</title>
     <link rel="stylesheet" type="text/css" href="libs/css/roboto.css">
+    <link rel="stylesheet" type="text/css" href="libs/css/arrow-icons.css">
     <link rel="stylesheet" type="text/css" href="./home.css">
 </head>
 <body>
 <div class="wrapper">
-    <div id="header" class="header">
-        <% if (!user) { %>
-        <a style="display: inline-block;margin-right: 20px;float: right;margin-top: 1em;" href="/login">LogIn</a>
-        <% } else { %>
-        <span style="display: inline-block;margin-right: 20px;float: right;margin-top: 1em;"><%= user.username %></span>
-        <a style="display: inline-block;margin-right: 20px;float: right;margin-top: 1em;" href="/logout">Logout</a>
-        <% } %>
-    </div>
+    <% include ./partials/header %>
     <h1>Applications</h1>
-    <br><br>
+    <br>
+
+    <div class="container" ng-app="ApplicationDisplayApp" ng-controller="ApplicationDisplayController"
+         id="applications-list">
+        <form>
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search Substation name"
+                           ng-model="searchLine">
+                    <label style="margin-left: 25px">Lines per Page</label>
+                    <input type="number" min="1" max="1000" class="form-control" ng-model="pageSize">
+                </div>
+            </div>
+        </form>
+        <br>
+        <table>
+            <thead>
+            <tr>
+                <td>
+                    <a class="sort-clicker" href="#" ng-click="sortType = 'id'; sortReverse = !sortReverse">
+                        ID
+                        <span ng-show="sortType == 'id' && !sortReverse" class="arrow-down"></span>
+                        <span ng-show="sortType == 'id' && sortReverse" class="arrow-up"></span>
+                    </a>
+                </td>
+                <td>
+                    <a class="sort-clicker" href="#" ng-click="sortType = 'description'; sortReverse = !sortReverse">
+                        Description
+                        <span ng-show="sortType == 'description' && !sortReverse" class="arrow-down"></span>
+                        <span ng-show="sortType == 'description' && sortReverse" class="arrow-up"></span>
+                    </a>
+                </td>
+                <td>
+                    <a class="sort-clicker" href="#"
+                       ng-click="sortType = 'sc_ka'; sortReverse = !sortReverse">
+                        Short-ckt current
+                        <span ng-show="sortType == 'sc_ka' && !sortReverse" class="arrow-down"></span>
+                        <span ng-show="sortType == 'sc_ka' && sortReverse" class="arrow-up"></span>
+                    </a>
+                </td>
+                <td>
+                    <a class="sort-clicker" href="#"
+                       ng-click="sortType = 'failure_fault_ka'; sortReverse = !sortReverse">
+                        Failure Fault Current
+                        <span ng-show="sortType == 'failure_fault_ka' && !sortReverse" class="arrow-down"></span>
+                        <span ng-show="sortType == 'failure_fault_ka' && sortReverse" class="arrow-up"></span>
+                    </a>
+                </td>
+                <td>
+                    <a class="sort-clicker" href="#"
+                       ng-click="sortType = 'sc_duration'; sortReverse = !sortReverse">
+                        sc_duration
+                        <span ng-show="sortType == 'sc_duration' && !sortReverse" class="arrow-down"></span>
+                        <span ng-show="sortType == 'sc_duration' && sortReverse" class="arrow-up"></span>
+                    </a>
+                </td>
+                <td>
+                    <a class="sort-clicker" href="#"
+                       ng-click="sortType = 'n_shots'; sortReverse = !sortReverse">
+                        n_shots
+                        <span ng-show="sortType == 'n_shots' && !sortReverse" class="arrow-down"></span>
+                        <span ng-show="sortType == 'n_shots' && sortReverse" class="arrow-up"></span>
+                    </a>
+                </td>
+                <td>
+                    <a class="sort-clicker" href="#"
+                       ng-click="sortType = 'from_time'; sortReverse = !sortReverse">
+                        from_time
+                        <span ng-show="sortType == 'from_time' && !sortReverse" class="arrow-down"></span>
+                        <span ng-show="sortType == 'from_time' && sortReverse" class="arrow-up"></span>
+                    </a>
+                </td>
+                <td>
+                    <a class="sort-clicker" href="#"
+                       ng-click="sortType = 'to_time'; sortReverse = !sortReverse">
+                        to_time
+                        <span ng-show="sortType == 'to_time' && !sortReverse" class="arrow-down"></span>
+                        <span ng-show="sortType == 'to_time' && sortReverse" class="arrow-up"></span>
+                    </a>
+                </td>
+                <td>
+                    <a class="sort-clicker" href="#"
+                       ng-click="sortType = 'created_at'; sortReverse = !sortReverse">
+                        created_at
+                        <span ng-show="sortType == 'created_at' && !sortReverse" class="arrow-down"></span>
+                        <span ng-show="sortType == 'created_at' && sortReverse" class="arrow-up"></span>
+                    </a>
+                </td>
+                <td>
+                    <a class="sort-clicker" href="#"
+                       ng-click="sortType = 'updated_at'; sortReverse = !sortReverse">
+                        updated_at
+                        <span ng-show="sortType == 'updated_at' && !sortReverse" class="arrow-down"></span>
+                        <span ng-show="sortType == 'updated_at' && sortReverse" class="arrow-up"></span>
+                    </a>
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr dir-paginate="application in applications | orderBy:sortType:sortReverse | filter:searchLine | itemsPerPage:pageSize">
+                <td>{{ application.id }}</td>
+                <td>{{ application.description }}</td>
+                <td>{{ application.sc_ka }}</td>
+                <td>{{ application.failure_fault_ka }}</td>
+                <td>{{ application.sc_duration }}</td>
+                <td>{{ application.n_shots }}</td>
+                <td>{{ application.from_time | date:'dd-MM-yyyy, HH:mm' }}</td>
+                <td>{{ application.to_time | date:'dd-MM-yyyy, HH:mm' }}</td>
+                <td>{{ application.created_at | date:'dd-MM-yyyy, HH:mm' }}</td>
+                <td>{{ application.updated_at | date:'dd-MM-yyyy, HH:mm' }}</td>
+            </tr>
+            </tbody>
+
+        </table>
+        <dir-pagination-controls
+                max-size="5"
+                direction-links="true"
+                boundary-links="true">
+        </dir-pagination-controls>
+    </div>
+    <br>
     <a href="/application-create">Create Application</a>
+
     <div class="push"></div>
 </div>
 
 <% include ./partials/footer %>
+<script src="libs/js/angular.min.js"></script>
+<script src="libs/js/dirPagination.js"></script>
+<script src="libs/js/jquery.min.js"></script>
+<script src="libs/js/dateStringHelper.js"></script>
 <script src="home.js"></script>
 </body>
 </html>
