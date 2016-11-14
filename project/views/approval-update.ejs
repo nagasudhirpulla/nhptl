@@ -22,34 +22,34 @@
                 <td><input type="text" id="application_id" value="<%= approval_data.application_id %>"></td>
             </tr>
             <tr>
-                <td>Test Description</td>
+                <td>Test Equipment Description</td>
                 <td><input type="text" id="description" value="<%= approval_data.description %>"></td>
             </tr>
             <tr>
-                <td>Short Circuit KA</td>
+                <td>Expected Short Circuit current (kA)</td>
                 <td><input type="number" id="sc_ka" min="0" step="0.01" value="<%= approval_data.sc_ka %>"></td>
             </tr>
             <tr>
-                <td>Failure KA in case of fault</td>
+                <td>Expected Fault Current (kA) in case of failure of equipment</td>
                 <td><input type="number" id="failure_fault_ka" min="0" step="0.01"
                            value="<%= approval_data.failure_fault_ka %>"></td>
             </tr>
             <tr>
-                <td>Short Circuit Duration in milliseconds</td>
+                <td>Time Duration of Short Circuit Current (ms)</td>
                 <td><input type="number" id="sc_duration" min="0" value="<%= approval_data.sc_duration %>"></td>
             </tr>
             <tr>
-                <td>Number of shots</td>
+                <td>Number of shots of short circuit current (excluding calibration shots)</td>
                 <td><input type="number" min="0" id="n_shots" value="<%= approval_data.n_shots %>"></td>
             </tr>
             <tr>
-                <td>Test Start Time</td>
+                <td>Testing Window Start Time</td>
                 <td><input type="datetime-local" id="from_time"
                            value="<%= (new Date(new Date(approval_data.from_time) - 6.5 * 60 * 60 * 1000)).toJSON().slice(0, 19) %>">
                 </td>
             </tr>
             <tr>
-                <td>Test Stop Time</td>
+                <td>Testing Window Stop Time</td>
                 <td><input type="datetime-local" id="to_time"
                            value="<%= (new Date(new Date(approval_data.to_time) - 6.5 * 60 * 60 * 1000)).toJSON().slice(0, 19) %>">
                 </td>
