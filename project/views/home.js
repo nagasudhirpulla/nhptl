@@ -24,20 +24,44 @@ function fetchApplications() {
     });
 }
 
-function fillApplicationsTable(applicationsArray){
+function fillApplicationsTable(applicationsArray) {
     angular.element(document.getElementById('applications-list')).scope().updateApplications(applicationsArray);
+}
+
+function deleteApplicationData(applicationId) {
+    if (confirm("Do you really want to delete the application " + applicationId + " ???") == false) {
+        return;
+    }
+    $.ajax({
+        //fetch categories from sever
+        url: "http://localhost:3000/api/applications/",
+        type: "DELETE",
+        dataType: "json",
+        data: {application_id: applicationId},
+        dataType: "json",
+        success: function (data) {
+            toastr["success"]("Application deletion info is " + JSON.stringify(data));
+            console.log("Application deletion info is " + JSON.stringify(data));
+            fetchApplications();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            toastr.error("The error from server is --- " + jqXHR.responseJSON.message);
+
+        }
+    });
 }
 
 angular.module('ApplicationDisplayApp', ['angularUtils.directives.dirPagination'])
 
     .controller('ApplicationDisplayController', function ($scope) {
-        $scope.sortType = 'id'; // set the default sort type
+        $scope.sortType = 'from_time'; // set the default sort type
         $scope.sortReverse = true;  // set the default sort order
         $scope.searchLine = '';     // set the default search/filter term
         $scope.applications = [];
 
         $scope.updateApplications = function (applicationsArray) {
-            $scope.applications = applicationsArray.map(function(obj) {
+            $scope.applications = applicationsArray.map(function (obj) {
                 obj.from_time = new Date(obj.from_time);
                 obj.to_time = new Date(obj.to_time);
                 obj.created_at = new Date(obj.created_at);
@@ -49,4 +73,9 @@ angular.module('ApplicationDisplayApp', ['angularUtils.directives.dirPagination'
 
         //set page size
         $scope.pageSize = 30;
+
+        //Delete application button function
+        $scope.deleteApplicationData = function (applicationId) {
+            window.deleteApplicationData(applicationId);
+        };
     });

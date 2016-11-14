@@ -8,9 +8,12 @@ var tableColumns = ["id", "description", "sc_ka", "failure_fault_ka", "sc_durati
 
 exports.get = function (id, done) {
     var sql = squel.select()
-        .from(tableName);
+        .field(tableName + ".*")
+        .field("approvals.id", "approval_id")
+        .from(tableName)
+        .left_join("approvals", null, tableName + ".id = approvals.application_id");
     if (id != null && !isNaN(id)) {//qualifies if id != "" and id!=null and id is a number
-        sql.where("id = " + id);
+        sql.where(tableName + ".id = " + id);
     }
     //console.log("sql for Application get is " + sql);
     db.get().query(sql.toString(), function (err, rows) {
@@ -58,7 +61,7 @@ exports.delete = function (id, done) {
     var sql = squel.delete()
         .from(tableName)
         .where(tableColumns[0] + " = " + id);
-    //console.log("The application delete SQL query is " + sql.toString());
+    console.log("The application delete SQL query is " + sql.toString());
     db.get().query(sql.toString(), function (err, result) {
         if (err) return done(err);
         done(null, result);

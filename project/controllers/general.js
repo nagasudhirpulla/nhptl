@@ -26,16 +26,13 @@ router.get('/application-update', function (req, res, next) {
     }
     responseData.application_id = app_id;
     Application.get(app_id, function (err, rows) {
-        if (err) {
-            res.json({'Error': err});
-        }
         if (err) return next(err);
         responseData['application_data'] = rows[0];
         res.render('application-update', responseData);
     });
 });
 
-router.get('/approval-create', function (req, res) {
+router.get('/approval-create', function (req, res, next) {
     //console.log((typeof req.user == 'undefined') ? "undefined" : req.user.username);
     var responseData = {user: req.user, 'application_data': {}};
     var app_id = req.query.id;
@@ -44,16 +41,13 @@ router.get('/approval-create', function (req, res) {
     }
     responseData.application_id = app_id;
     Application.get(app_id, function (err, rows) {
-        if (err) {
-            res.json({'Error': err});
-        }
         if (err) return next(err);
         responseData['application_data'] = rows[0];
         res.render('approval-create', responseData);
     });
 });
 
-router.get('/approval-update', function (req, res) {
+router.get('/approval-update', function (req, res,next) {
     //console.log((typeof req.user == 'undefined') ? "undefined" : req.user.username);
     var responseData = {user: req.user, 'approval_data': null};
     var app_id = req.query.id;
@@ -62,9 +56,7 @@ router.get('/approval-update', function (req, res) {
     }
     responseData.application_id = app_id;
     Approval.get(app_id, function (err, rows) {
-        if (err) {
-            res.json({'Error': err});
-        }
+        if (err) return next(err);
         responseData['approval_data'] = rows[0];
         res.render('approval-update', responseData);
     });

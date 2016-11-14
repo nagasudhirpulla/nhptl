@@ -4,6 +4,7 @@
     <title>Home</title>
     <link rel="stylesheet" type="text/css" href="libs/css/roboto.css">
     <link rel="stylesheet" type="text/css" href="libs/css/arrow-icons.css">
+    <link rel="stylesheet" type="text/css" href="libs/css/toastr.min.css">
     <link rel="stylesheet" type="text/css" href="./home.css">
 </head>
 <body>
@@ -17,7 +18,7 @@
         <form>
             <div class="form-group">
                 <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Search Substation name"
+                    <input type="text" class="form-control" placeholder="Search Text"
                            ng-model="searchLine">
                     <label style="margin-left: 25px">Lines per Page</label>
                     <input type="number" min="1" max="1000" class="form-control" ng-model="pageSize">
@@ -106,11 +107,20 @@
                         <span ng-show="sortType == 'updated_at' && sortReverse" class="arrow-up"></span>
                     </a>
                 </td>
+                <td>
+                    <a class="sort-clicker" href="#"
+                       ng-click="sortType = 'approval_id'; sortReverse = !sortReverse">
+                        Approval Id
+                        <span ng-show="sortType == 'approval_id' && !sortReverse" class="arrow-down"></span>
+                        <span ng-show="sortType == 'approval_id' && sortReverse" class="arrow-up"></span>
+                    </a>
+                </td>
             </tr>
             </thead>
             <tbody>
             <tr dir-paginate="application in applications | orderBy:sortType:sortReverse | filter:searchLine | itemsPerPage:pageSize">
-                <td>{{ application.id }}</td>
+                <td><a href="/application-update?id={{ application.id }}">{{
+                        application.id }}</a></td>
                 <td>{{ application.description }}</td>
                 <td>{{ application.sc_ka }}</td>
                 <td>{{ application.failure_fault_ka }}</td>
@@ -119,7 +129,17 @@
                 <td>{{ application.from_time | date:'dd-MM-yyyy, HH:mm' }}</td>
                 <td>{{ application.to_time | date:'dd-MM-yyyy, HH:mm' }}</td>
                 <td>{{ application.created_at | date:'dd-MM-yyyy, HH:mm' }}</td>
-                <td>{{ application.updated_at | date:'dd-MM-yyyy, HH:mm' }}</td>
+                <td><span ng-if="application.created_at.toString() != application.updated_at.toString()">{{application.updated_at |
+                    date:'dd-MM-yyyy, HH:mm' }}</span>
+                </td>
+                <td><a href="/approval-update?id={{ application.approval_id }}" ng-if="application.approval_id != null">{{
+                        application.approval_id }}</a>
+                    <a href="/approval-create?id={{ application.id }}" ng-if="application.approval_id == null">Create
+                        Approval</a>
+                </td>
+                <td>
+                    <a href="#" ng-click="deleteApplicationData(application.id)">Delete</a>
+                </td>
             </tr>
             </tbody>
 
@@ -131,7 +151,8 @@
         </dir-pagination-controls>
     </div>
     <br>
-    <a href="/application-create">Create Application</a>
+    <a href="/application-create" style="font-weight: bold;text-decoration: underline;margin-left: 10px">Create
+        Application</a>
 
     <div class="push"></div>
 </div>
@@ -141,6 +162,7 @@
 <script src="libs/js/dirPagination.js"></script>
 <script src="libs/js/jquery.min.js"></script>
 <script src="libs/js/dateStringHelper.js"></script>
+<script src="libs/js/toastr.min.js"></script>
 <script src="home.js"></script>
 </body>
 </html>
